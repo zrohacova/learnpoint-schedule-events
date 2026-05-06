@@ -1,0 +1,72 @@
+html, body {
+    height: 100%;
+}
+body {
+    margin: 0;
+}
+
+body {
+    font-family: -apple-system, "Segoe UI", Helvetica, sans-serif;
+    background-color: hsl(38 35% 97% / 1);
+}
+
+.content {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.groups-filter {
+    margin-top: 10px;
+}
+
+.group-row-course {
+    margin-left: 15px;
+}
+
+.students-filter {
+    margin-top: 30px;
+}
+
+.calendar {
+    width: 75%;
+    margin-left: 30px;
+}
+
+.calendar-days-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 50px;
+    height: 20px;
+}
+
+.calendar-day-column {
+    position: relative;
+    border-left: 1px solid black;
+    box-sizing: border-box;
+    /* border-right: 1px solid black; */
+    padding: 0px 30px 0px 30px;
+    height: 100%;
+}
+
+/* .calendar-grid {
+    height: 60%;
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    grid-template-rows: 50px repeat(8, 60px);
+    border: 1px solid #ccc;
+} */
+
+.calendar-time-labels {
+    
+}
+
+.calendar-time-label {
+    border-bottom: 1px solid black;
+    height: 60px;
+    
+}
