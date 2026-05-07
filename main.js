@@ -57,37 +57,122 @@ for (const element of students) {
 const events = [
     { value: "Activity", starttime: "10:00", end: "11:00", duration: 60, day: "Mon" },
     { value: "Lab", starttime: "12:30", end: "14:00", duration: 90, day: "Tue" },
-    { value: "Lecture 1", starttime: "14:20", end: "15:15", duration: 55, day: "Thu" },
-    { value: "Lecture 2", starttime: "14:20", end: "16:50", duration: 135, day: "Thu" },
-    { value: "Lecture 3", starttime: "14:50", end: "16:50", duration: 30, day: "Thu" },
+    { value: "Lecture 1", starttime: "14:00", end: "15:00", duration: 60, day: "Thu" },
+    { value: "Lecture 2", starttime: "14:30", end: "15:30", duration: 60, day: "Thu" },
+    { value: "Lecture 3", starttime: "15:00", end: "15:50", duration: 50, day: "Thu" },
 ]
+let i = 0;
 
+function layoutEvents(events) {
+    const overlappingGroups = [];
+    let currentGroup = [];
+    let lastEventEnding = null;
 
-for (const event of events) {
-    const dayDiv = document.getElementById(event.day);
-    const eventDiv = document.createElement("div");
+    for (const ev of events) {
+        if (lastEventEnding !== null && ev.starttime >= lastEventEnding) {
+            overlappingGroups.push(currentGroup);
+            currentGroup = [];
+            lastEventEnding = null;
+        }
 
-    const startHour = event.starttime.split(":")[0]
-    const startMinute = event.starttime.split(":")[1]
+        currentGroup.push(ev);
 
-    eventDiv.innerText = event.value;
-    //eventDiv.style.width = "100%"
-    eventDiv.style.height = 60 * event.duration / 60 + "px"; // duration in minutes + borders
-    eventDiv.style.backgroundColor = getRandomColor();   
+        if (lastEventEnding === null || ev.end > lastEventEnding) {
+            lastEventEnding = ev.end;
+        }
+    }
 
-    
-    eventDiv.style.position = "absolute";
-    eventDiv.style.top = 20 + (startHour - 7) + (startHour - 7) * 60 + (startMinute * 60 / 60) + "px"; // header size + something with borders? + moved hour AND PLUS minutes offset
+    overlappingGroups.push(currentGroup);
 
-
-   
-    dayDiv.appendChild(eventDiv)
-
-
+    return overlappingGroups;
 }
 
-function getRandomColor() {
-    color = "hsl(" + Math.random() * 360 + ", 100%, 75%)";
-    return color;
+const overlappingGroups = layoutEvents(events);
+overlappingGroups.forEach((group, i) => {
+    console.log(`Group ${i + 1}:`);
+    group.forEach((ev) => console.log(`  - ${ev.value} (${ev.starttime}–${ev.end})`));
+});
+
+// visualization - groups
+for (const g of overlappingGroups) {
+    const dayDiv = document.getElementById(g[0].day);
+
+    const gStartHour = g[0].starttime.split(":")[0];
+
+    const groupDivWrapper = document.createElement("div");
+    groupDivWrapper.style.width = dayDiv.offsetWidth;
+    groupDivWrapper.style.position = "absolute";
+    groupDivWrapper.style.top = 20 + (gStartHour - 7) + (gStartHour - 7) * 60 + "px";
+
+    dayDiv.appendChild(groupDivWrapper);
+
+    const groupDiv = document.createElement("div");
+    groupDiv.classList.add("calendar-events-group");
+    // groupDiv.style.width = dayDiv.offsetWidth;
+    // groupDiv.style.position = "absolute";
+    // groupDiv.style.top = 20 + (startHour - 7) + (startHour - 7) * 60 + "px";
+
+    for (const event of g) {
+        const eventDiv = document.createElement("div");
+
+        const startHour = event.starttime.split(":")[0]
+        const startMinute = event.starttime.split(":")[1]
+
+        eventDiv.innerText = event.value;
+        // eventDiv.style.width = `${100 / g.length}%`;
+        eventDiv.style.height = (((startHour - gStartHour) * 60) + (startMinute * 60 / 60)) + 60 * event.duration / 60 + "px"; // duration in minutes + borders
+        eventDiv.style.backgroundColor = "hsl(" + Math.random() * 360 + ", 100%, 75%)";
+        // eventDiv.style.position = "absolute";
+        // eventDiv.style.top = ((startHour - gStartHour) * 60) + (startMinute * 60 / 60) + "px"
+
+
+
+        // eventDiv.style.position = "absolute";
+        // eventDiv.style.top = 20 + (startHour - 7) + (startHour - 7) * 60 + (startMinute * 60 / 60) + "px"; // header size + something with borders? + moved hour AND PLUS minutes offset
+        groupDiv.append(eventDiv)
+
+    }
+
+    groupDivWrapper.appendChild(groupDiv);
 }
+
+
+
+
+
+// visualization 
+
+// i = 0;
+
+// while (i < events.length) {
+//     const event = events[i];
+
+//     const dayDiv = document.getElementById(event.day);
+//     const eventDiv = document.createElement("div");
+
+//     const startHour = event.starttime.split(":")[0]
+//     const startMinute = event.starttime.split(":")[1]
+
+//     let overlappingForCurrent = 0;
+//     for (let j = i + 1; j < events.length; j++) {
+//         const nextEvent = events[j];
+
+//         if (event.starttime < nextEvent.end && event.end > event.starttime) {
+//             overlappingForCurrent++;
+//         }
+
+//     }
+
+//     eventDiv.innerText = event.value;
+//     eventDiv.style.width = `${100 / (overlappingForCurrent + 1)}%`;
+//     eventDiv.style.height = 60 * event.duration / 60 + "px"; // duration in minutes + borders
+//     eventDiv.style.backgroundColor = "hsl(" + Math.random() * 360 + ", 100%, 75%)";
+
+
+//     eventDiv.style.position = "absolute";
+//     eventDiv.style.top = 20 + (startHour - 7) + (startHour - 7) * 60 + (startMinute * 60 / 60) + "px"; // header size + something with borders? + moved hour AND PLUS minutes offset
+
+//     dayDiv.appendChild(eventDiv)
+//     i++;
+// }
 
