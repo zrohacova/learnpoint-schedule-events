@@ -1,0 +1,55 @@
+// const groups =
+//     [
+//         { id: 0, code: "Yh-skolan", value: "Yh-skolan", parent: null, active: true },
+//         { id: 1, value: "Javautvecklare", code: "JAV", parent: null, active: true },
+//         { id: 5, value: "Examensarbete", code: "JAV_EXA", parent: 1, active: true },
+//         { id: 6, value: "Grunder i Java", code: "JAV_GIJ", parent: 1, active: true },
+//         { id: 8, value: "LIA 1", code: "JAV_LIA", parent: 1, active: false },
+//         { id: 2, value: "Redovisningekonom", code: "REK", parent: null, active: true },
+//         { id: 9, value: "Skattelagstifning", code: "REK_SKA", parent: 2, active: true },
+//         { id: 10, value: "Årsredovisningar och bokslut", code: "REK_AOB", parent: 2, active: true },
+//         { id: 11, value: "LIA 2", code: "REK_LIA2", parent: 2, active: true },
+//         { id: 12, value: "LIA 1", code: "REK_LIA1", parent: 2, active: true },
+//         { id: 13, value: "Redovisning inom offentlig sektor", code: "REK_ReOf", parent: 2, active: false },
+//         { id: 14, value: "Handelsrätt", code: "REK_HR", parent: 2, active: false },
+//         { id: 15, value: "Ekonomistyrning", code: "REK_Ekos", parent: 2, active: false },
+//         { id: 3, value: "Tandsköterska", code: "TAN", parent: null, active: true },
+//         { id: 4, value: "Arkitektur", code: "ARK", parent: null, active: false }
+//     ]
+
+// const students = [
+//     { id: 0, name: "Stig Berg" },
+//     { id: 1, name: "Lise Berg" },
+//     { id: 2, name: "Göte Borg" },
+//     { id: 3, name: "Red Berg" },
+// ]
+
+// const personal = [
+//     { id: 0, name: "Karl Kalkyl" },
+//     { id: 1, name: "Tina Isberg" },
+// ]
+
+
+// const groupFilter = document.getElementsByClassName("groups-filter")[0];
+// for (const element of groups) {
+//     const html = `
+//     <div class="group-row-${element.parent ? "course" : "program"}">
+//         <input type="checkbox" value="${element.value}" id="group-${element.id}">
+//         <label>${element.value}</label>
+//     </div>
+//     `
+
+//     groupFilter.insertAdjacentHTML("beforeend", html)
+// }
+
+// const studentFilter = document.getElementsByClassName("students-filter")[0];
+// for (const element of students) {
+//     const html = `
+//     <div class="user-row">
+//         <input type="checkbox" value="${element.name}" id="student-${element.id}">
+//         <label>${element.name}</label>
+//     </div>
+//     `
+
+//     studentFilter.insertAdjacentHTML("beforeend", html)
+// }
