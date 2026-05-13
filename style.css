@@ -87,16 +87,12 @@ body {
     width: 60px;
 }
 
-.calendar-time-labels-2 {
-    
-}
 
-
-.calendar-time-label-2 {
+.calendar-row {
     height: 60px;
 }
 
-.calendar-time-label-2::after {
+.calendar-row::after {
     content: "";
     border-bottom: black 1px solid;
     position: absolute;
@@ -115,4 +111,10 @@ body {
     flex-wrap: wrap; */
     flex-flow: row wrap;
 
+}
+
+.calendar-day-view {
+    width: 100%;
+    border-left: 1px solid black;
+    position: relative;
 }

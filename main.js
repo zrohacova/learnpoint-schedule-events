@@ -11,7 +11,7 @@ dateHeaders.innerText = `${monday.toLocaleDateString()} - ${sunday.toLocaleDateS
 
 const prevButton = document.getElementById("previousButton");
 prevButton.addEventListener('click', (e) => {
-    const currentWeek = new Date(document.getElementsByClassName("calendar-day-column")[0].id);
+    const currentWeek = new Date(document.getElementsByClassName("calendar-day-view")[0].id);
     currentWeek.setDate(currentWeek.getDate() - 7);
     renderCalendar(currentWeek);
 
@@ -19,7 +19,7 @@ prevButton.addEventListener('click', (e) => {
 
 const nextButton = document.getElementById("nextButton");
 nextButton.addEventListener('click', (e) => {
-    const currentWeek = new Date(document.getElementsByClassName("calendar-day-column")[0].id);
+    const currentWeek = new Date(document.getElementsByClassName("calendar-day-view")[0].id);
     currentWeek.setDate(currentWeek.getDate() + 7);
     renderCalendar(currentWeek);
 
@@ -27,6 +27,7 @@ nextButton.addEventListener('click', (e) => {
 
 
 const daysHeader = document.getElementsByClassName("calendar-days-header")[0];
+const daysColumn = document.getElementsByClassName("calendar-day-view");
 
 const options = { weekday: "short" };
 
@@ -34,9 +35,11 @@ for (let i = 0; i < 7; i++) {
     const day = new Date(currentDate.setDate(first + i))
     const weekColumn = document.createElement("div");
     weekColumn.classList.add("calendar-day-column");
-    weekColumn.id = `${new Date(day).toLocaleDateString()}`;
+    // weekColumn.id = `${new Date(day).toLocaleDateString()}`;
     weekColumn.innerText = `${new Intl.DateTimeFormat("sv-SE", options).format(day)}, ${day.getDate()}`;
     daysHeader.appendChild(weekColumn);
+
+    daysColumn[i].id = `${new Date(day).toLocaleDateString()}`;
 }
 
 function renderCalendar(firstDayDate) {
@@ -50,16 +53,18 @@ function renderCalendar(firstDayDate) {
 
     // changing columns
     const daysHeader = document.getElementsByClassName("calendar-day-column");
+    const daysColumn = document.getElementsByClassName("calendar-day-view");
 
     for (let i = 0; i < 7; i++) {
         const day = new Date(firstDayDate);
-         day.setDate(day.getDate() + i);
+        day.setDate(day.getDate() + i);
 
-        daysHeader[i].id = `${day.toLocaleDateString()}`;
+        //daysHeader[i].id = `${day.toLocaleDateString()}`;
+        daysColumn[i].id = `${day.toLocaleDateString()}`;
         daysHeader[i].innerText = `${new Intl.DateTimeFormat("sv-SE", options).format(day)}, ${day.getDate()}`;
     }
 
-    
+
 }
 
 
@@ -107,7 +112,7 @@ for (let i = 0; i < eventsData.length; i++) {
         j++;
     }
 
-    if (j >= slotEndDates.length) {
+    if (j >= slotEndDates.length && overlap === 0) {
 
         if (overlap === 0) {
             overlap++;
@@ -125,6 +130,8 @@ for (let i = 0; i < eventsData.length; i++) {
     events.push({ ...event, startSlot, overlap });
 }
 
+
+
 for (const event of events) {
     const eventDate = event.starttime.toLocaleDateString();
     const dayDiv = document.getElementById(eventDate);
@@ -137,14 +144,23 @@ for (const event of events) {
     const duration = Math.round((event.end.getTime() - event.starttime.getTime()) / 60000);
 
     eventDiv.innerText = event.value;
-    eventDiv.style.width = `${100 / slotEndDates.length * event.overlap}%`;
-    eventDiv.style.height = 60 * duration / 60 + "px"; // duration in minutes
+    //eventDiv.style.width = `${100 / slotEndDates.length * event.overlap}%`;
+    //eventDiv.style.height = 60 * duration / 60 + "px"; // duration in minutes
     eventDiv.style.backgroundColor = "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 
-
     eventDiv.style.position = "absolute";
-    eventDiv.style.top = 20 + (startHour - 7) + (startHour - 7) * 60 + (startMinute * 60 / 60) + "px"; // header size + something with borders? + moved hour AND PLUS minutes offset
-    eventDiv.style.left = 60 * event.startSlot + "px";
+
+    const top = (((startHour - 7) * 60 + startMinute) / 600) * 100 + "%";
+    const bottom = 100 - (((event.end.getHours() - 7) * 60 + event.end.getMinutes()) / 600) * 100 + "%";
+    const left = 1 / slotEndDates.length * event.startSlot * 100 + "%";
+    const right = (slotEndDates.length - (event.startSlot + event.overlap)) / slotEndDates.length * 100 + "%";
+    eventDiv.style.inset = `${top} ${right} ${bottom} ${left}`;
+
+
+
+    
+    //eventDiv.style.top = 20 + (startHour - 7) + (startHour - 7) * 60 + (startMinute * 60 / 60) + "px"; // header size + something with borders? + moved hour AND PLUS minutes offset
+    //eventDiv.style.left = 60 * event.startSlot + "px";
     dayDiv.appendChild(eventDiv);
 
 }
